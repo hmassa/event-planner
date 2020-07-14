@@ -1,0 +1,70 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
+
+html {
+  background-color: #c1efff;
+}
+
+.App {
+  text-align: center;
+  /* display: flex; */
+  justify-content: center;
+  align-items: center;
+  font-family: "Raleway", sans-serif;
+}
+
+.login {
+  width: 27em;
+  height: 100%;
+  margin: 50px auto;
+  transition: all 400ms ease-in-out;
+}
+
+.login-container {
+  background-color: white;
+  box-shadow: 0 0 12px 2px rgba(15, 15, 15, 0.2);
+  border-radius: 4px;
+  padding: 17px 10px;
+  z-index: 1;
+}
+
+.tab {
+  background-color: #00bfff;
+  padding: 5px 0;
+  width: 90%;
+  margin: 0 5%;
+  border-radius: 0 0 6px 6px;
+  transition: all 400ms ease-in-out;
+  cursor: pointer;
+  box-shadow: 0 0 12px 2px rgba(15, 15, 15, 0.2);
+  z-index: 0;
+}
+
+.tab:hover {
+  padding-top: 15px;
+}
+
+.text {
+  font-size: 20px;
+  font-weight: 500;
+  color: white;
+  margin: 0 3em;
+}
+
+.btn {
+  font-size: 20px;
+  padding: 8px 30px;
+  border: none;
+  background-color: #00bfff;
+  color: white;
+  border-radius: 4px;
+  transition: all 400ms ease-in-out;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #c1efff;
+}
+
+.btn:focus {
+  outline: none;
+}
