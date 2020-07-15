@@ -32,27 +32,39 @@ export class Register extends React.Component {
 
   checkUsername(event) {
     this.setState({ username: event.target.value });
+    var errorText = "";
     axios
-      .get("http://localhost:8080/register.php", {
-        params: {
+      .post(
+        "http://localhost:8080/register.php",
+        {
           function: "search",
-          username: this.state.username,
+          username: event.target.value,
         },
-      })
-      .then(function (response) {
-        if (response.toString().localeCompare("match") === 0) {
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
         }
+      )
+      .then(function (response) {
+        console.log(response);
+        // if (response["data"].localeCompare("match") === 0) {
+        //   errorText = "This username is already taken. Try another.";
+        // }
       })
       .catch(function (error) {
         console.log(error);
       });
+    this.setState({
+      usernameError: errorText,
+    });
   }
 
   handleSubmit(event) {
     event.preventDefault();
     const { password1, password2 } = this.state;
     if (password1.localeCompare(password2) !== 0) {
-      this.setState({ passError: "The passwords you entered do not match" });
+      this.setState({ passError: "The passwords you entered do not match." });
     } else {
       axios
         .post("http://localhost:8080/register.php", {
@@ -110,6 +122,7 @@ export class Register extends React.Component {
                 onChange={this.handleChange}
               />
             </div>
+            <div className="error"></div>
             <div className="form-group">
               <label htmlFor="username">Username</label>
               <input
@@ -144,7 +157,6 @@ export class Register extends React.Component {
                 onChange={this.handleChange}
               />
             </div>
-            <div className="error">{this.state.usernameError}</div>
             <div className="form-group">
               <input className="btn" type="submit" value="Register"></input>
             </div>

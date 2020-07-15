@@ -10,37 +10,38 @@
 
     require_once "pdo.php";
 
-    $function = empty($_GET['function']) ? '' : $_GET['function'];
-    $username = empty($_GET['username']) ? '' : $_GET['username'];
+    $function = empty($_POST['function']) ? '' : $_POST['function'];
+    $username = empty($_POST['username']) ? '' : $_POST['username'];
 
     if (strcmp($function, "search") == 0){
         if ($username != ''){
             $stmt = $pdo->prepare("SELECT username FROM users WHERE username = ?");
             $stmt->execute([$username]);
             if($results = $stmt->fetch()){
-                echo('unique');
-            } else {
                 echo('match');
+            } else {
+                echo('unique');
             }
             $stmt = null;
         }
     } else {
-        $fname = empty($_GET['fname']) ? '' : $_GET['fname'];
-        $lname = empty($_GET['lname']) ? '' : $_GET['lname'];
-        $username = empty($_GET['username']) ? '' : $_GET['username'];
-        $password = empty($_GET['password']) ? '' : $_GET['password'];
+        $fname = empty($_POST['fname']) ? '' : $_POST['fname'];
+        $lname = empty($_POST['lname']) ? '' : $_POST['lname'];
+        $password = empty($_POST['password']) ? '' : $_POST['password'];
         $password = hash('sha256', $password);
-        $email = empty($_GET['email']) ? '' : $_GET['email'];
+        $email = empty($_POST['email']) ? '' : $_POST['email'];
 
-        $stmt = $pdo->prepare("INSERT INTO users VALUES (?, ?, ?, ?, ?)");
-        $value = $stmt->execute([$fname, $lname, $username, $password, $email]);
-        if ($value){
-            $_SESSION['loggedin'] = $username;
-            echo("success");
-        } else {
-            print_r($stmt->errorInfo(), true);
-        }
-        $stmt = null;
+        echo("fist: $fname last: $lname user: $username pass: $password email: $email");
+        // $stmt = $pdo->prepare("INSERT INTO users VALUES (?, ?, ?, ?, ?)");
+        // $value = $stmt->execute([$fname, $lname, $username, $password, $email]);
+        // if ($value){
+        //     $_SESSION['loggedin'] = $username;
+        //     echo("success");
+        // } else {
+        //     echo("failure");
+        //     // print_r($stmt->errorInfo(), true);
+        // }
+        // $stmt = null;
     }
     $pdo = null;
 ?>
