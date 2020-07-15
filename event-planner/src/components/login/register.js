@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import $ from "jquery";
 
 export class Register extends React.Component {
   constructor(props) {
@@ -33,28 +33,14 @@ export class Register extends React.Component {
   checkUsername(event) {
     this.setState({ username: event.target.value });
     var errorText = "";
-    axios
-      .post(
-        "http://localhost:8080/register.php",
-        {
-          function: "search",
-          username: event.target.value,
-        },
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
+    $.get(
+      "http://localhost:8080/search.php?username=" + event.target.value,
+      function (response) {
+        if (response.localeCompare("match") === 0) {
+          errorText = "This username is already taken. Try another one.";
         }
-      )
-      .then(function (response) {
-        console.log(response);
-        // if (response["data"].localeCompare("match") === 0) {
-        //   errorText = "This username is already taken. Try another.";
-        // }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      }
+    );
     this.setState({
       usernameError: errorText,
     });
@@ -66,20 +52,23 @@ export class Register extends React.Component {
     if (password1.localeCompare(password2) !== 0) {
       this.setState({ passError: "The passwords you entered do not match." });
     } else {
-      axios
-        .post("http://localhost:8080/register.php", {
+      $.post(
+        "http://localhost:8080/register.php",
+        {
           fname: this.state.fname,
           lname: this.state.lname,
           username: this.state.username,
           password: this.state.password1,
           email: this.state.email,
-        })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+        },
+        function (response) {
+          if (response.localeCompare("success")) {
+            console.log(response);
+          } else {
+            console.log(response);
+          }
+        }
+      );
     }
   }
 
