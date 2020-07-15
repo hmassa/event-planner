@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import $ from "jquery";
 
 export class Login extends React.Component {
   constructor(props) {
@@ -9,6 +9,8 @@ export class Login extends React.Component {
       password: "",
       usernameError: "",
       passError: "",
+      userErrorStyle: noError,
+      passErrorStyle: noError,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -27,55 +29,89 @@ export class Login extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    axios
-      .post("http://localhost:8080/login.php", {
+    $.post(
+      "http://localhost:8080/login.php",
+      {
         username: this.state.username,
         password: this.state.password,
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      },
+      (response) => {
+        if (response.localeCompare("success") === 0) {
+          console.log(response);
+        } else if (response.localeCompare("user") === 0) {
+          this.setState({
+            usernameError: "Incorrect username",
+            passError: "",
+            userErrorStyle: error,
+            passErrorStyle: noError,
+          });
+        } else {
+          this.setState({
+            passError: "Incorrect password",
+            usernameError: "",
+            userErrorStyle: noError,
+            passErrorStyle: error,
+          });
+          $("#passError").css(error);
+          $("#usernameError").css(noError);
+        }
+      }
+    );
   }
 
   render() {
     return (
       <div className="base-container" ref={this.props.containerRef}>
         <div className="header">Login</div>
-        <div className="content">
-          <form onSubmit={this.handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="username">Username</label>
-              <input
-                type="text"
-                name="username"
-                placeholder="username"
-                required
-                value={this.state.username}
-                onChange={this.handleChange}
-              />
+        <form className="accForm">
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              name="username"
+              placeholder="username"
+              required
+              value={this.state.username}
+              onChange={this.handleChange}
+            />
+            <div className="error" style={this.state.userErrorStyle}>
+              {this.state.usernameError}
             </div>
-            <div className="error">{this.state.usernameError}</div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                name="password"
-                placeholder="password"
-                required
-                value={this.state.password}
-                onChange={this.handleChange}
-              />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="password"
+              required
+              value={this.state.password}
+              onChange={this.handleChange}
+            />
+            <div className="error" style={this.state.passErrorStyle}>
+              {this.state.passError}
             </div>
-            <div className="error">{this.state.passError}</div>
-            <div className="form-group">
-              <input className="btn" type="submit" value="Login"></input>
-            </div>
-          </form>
-        </div>
+          </div>
+        </form>
+        <button type="button" className="btn" onClick={this.handleSubmit}>
+          Login
+        </button>
       </div>
     );
   }
 }
+
+const error = {
+  textAlign: "center",
+  width: "100%",
+  padding: "8px 0",
+  color: "#ff2a23",
+  backgroundColor: "#ffcccc",
+  fontSize: "14px",
+  border: "2px solid #ff2a23",
+};
+
+const noError = {
+  display: "none",
+};

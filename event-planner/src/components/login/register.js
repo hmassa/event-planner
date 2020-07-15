@@ -13,6 +13,8 @@ export class Register extends React.Component {
       password2: "",
       passError: "",
       usernameError: "",
+      passErrorStyle: noError,
+      userErrorStyle: noError,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -32,25 +34,32 @@ export class Register extends React.Component {
 
   checkUsername(event) {
     this.setState({ username: event.target.value });
-    var errorText = "";
     $.get(
       "http://localhost:8080/search.php?username=" + event.target.value,
-      function (response) {
+      (response) => {
         if (response.localeCompare("match") === 0) {
-          errorText = "This username is already taken. Try another one.";
+          this.setState({
+            usernameError: "This username is already taken. Try another one.",
+            userErrorStyle: error,
+          });
+        } else {
+          this.setState({ usernameError: "", userErrorStyle: noError });
         }
       }
     );
-    this.setState({
-      usernameError: errorText,
-    });
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    const { password1, password2 } = this.state;
+    const { password1, password2, usernameError } = this.state;
     if (password1.localeCompare(password2) !== 0) {
-      this.setState({ passError: "The passwords you entered do not match." });
+      this.setState({
+        passError: "The passwords you entered do not match.",
+        passErrorStyle: error,
+      });
+    } else if (usernameError.localeCompare("") !== 0) {
+      this.setState({ passErrorStyle: noError });
+      alert("Your username must be unique. Try again");
     } else {
       $.post(
         "http://localhost:8080/register.php",
@@ -76,82 +85,98 @@ export class Register extends React.Component {
     return (
       <div className="base-container" ref={this.props.containerRef}>
         <div className="header">Register</div>
-        <div className="content">
-          <form onSubmit={this.handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="fname">First Name</label>
-              <input
-                type="text"
-                name="fname"
-                placeholder="First Name"
-                required
-                value={this.state.first}
-                onChange={this.handleChange}
-              />
+        <form className="accForm">
+          <div className="form-group">
+            <label htmlFor="fname">First Name</label>
+            <input
+              type="text"
+              name="fname"
+              placeholder="First Name"
+              required
+              value={this.state.first}
+              onChange={this.handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="lname">Last Name</label>
+            <input
+              type="text"
+              name="lname"
+              placeholder="Last Name"
+              required
+              value={this.state.last}
+              onChange={this.handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              required
+              value={this.state.email}
+              onChange={this.handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              required
+              value={this.state.username}
+              onChange={this.checkUsername}
+            />
+            <div className="error" style={this.state.userErrorStyle}>
+              {this.state.usernameError}
             </div>
-            <div className="form-group">
-              <label htmlFor="lname">Last Name</label>
-              <input
-                type="text"
-                name="lname"
-                placeholder="Last Name"
-                required
-                value={this.state.last}
-                onChange={this.handleChange}
-              />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password1">Password</label>
+            <input
+              type="password"
+              name="password1"
+              placeholder="Password"
+              required
+              value={this.state.password1}
+              onChange={this.handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password2">Re-Enter Password</label>
+            <input
+              type="password"
+              name="password2"
+              placeholder="Re-Enter Password"
+              required
+              value={this.state.password2}
+              onChange={this.handleChange}
+            />
+            <div className="error" style={this.state.passErrorStyle}>
+              {this.state.passError}
             </div>
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                required
-                value={this.state.email}
-                onChange={this.handleChange}
-              />
-            </div>
-            <div className="error"></div>
-            <div className="form-group">
-              <label htmlFor="username">Username</label>
-              <input
-                type="text"
-                name="username"
-                placeholder="Username"
-                required
-                value={this.state.username}
-                onChange={this.checkUsername}
-              />
-            </div>
-            <div className="error">{this.state.usernameError}</div>
-            <div className="form-group">
-              <label htmlFor="password1">Password</label>
-              <input
-                type="password"
-                name="password1"
-                placeholder="Password"
-                required
-                value={this.state.password1}
-                onChange={this.handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password2">Re-Enter Password</label>
-              <input
-                type="password"
-                name="password2"
-                placeholder="Re-Enter Password"
-                required
-                value={this.state.password2}
-                onChange={this.handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <input className="btn" type="submit" value="Register"></input>
-            </div>
-          </form>
-        </div>
+          </div>
+        </form>
+        <button type="button" className="btn" onClick={this.handleSubmit}>
+          Register
+        </button>
       </div>
     );
   }
 }
+
+const error = {
+  textAlign: "center",
+  width: "100%",
+  padding: "8px 0",
+  color: "#ff2a23",
+  backgroundColor: "#ffcccc",
+  fontSize: "14px",
+  border: "2px solid #ff2a23",
+};
+
+const noError = {
+  display: "none",
+};

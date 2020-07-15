@@ -8,8 +8,6 @@
         exit;
     }
 
-    $username = empty($_SESSION['loggedin']) ? '' : $_SESSION['loggedin'];
-
     require_once 'pdo.php';
 
     $username = empty($_POST['username']) ? '' : $_POST['username'];
@@ -18,15 +16,16 @@
 
     $stmt = $pdo->prepare("SELECT password FROM users WHERE username = ?");
     $stmt->execute([$username]);
-    if($results = $stmt->fetch(PDO::FETCH_ASSOC)){
+    $results = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($stmt->rowCount() > 0){
         if (strcmp($password, $results['password']) == 0){
             $_SESSION['loggedin'] = $username;
             echo('success');
         } else {
-            echo('fail');
+            echo('pass');
         }  
     } else {
-        echo($stmt->errorInfo());
+        echo("user");
     }
 
     $pdo = null;
