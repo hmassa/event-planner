@@ -1,6 +1,6 @@
 import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
 import $ from "jquery";
+import PropTypes from "prop-types";
 import UserProfile from "./userProfile";
 
 export class Login extends React.Component {
@@ -14,12 +14,9 @@ export class Login extends React.Component {
       userErrorStyle: noError,
       passErrorStyle: noError,
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
+  handleChange = (event) => {
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -27,9 +24,9 @@ export class Login extends React.Component {
     this.setState({
       [name]: value,
     });
-  }
+  };
 
-  handleSubmit(event) {
+  handleSubmit = (event) => {
     event.preventDefault();
     $.post(
       "http://localhost:8080/login.php",
@@ -58,16 +55,17 @@ export class Login extends React.Component {
             response["lname"],
             response["username"]
           );
+          this.props.logIn();
         }
       }
     );
-  }
+  };
 
   render() {
     return (
       <div className="base-container" ref={this.props.containerRef}>
         <div className="header">Login</div>
-        <form className="accForm">
+        <form className="accForm" onSubmit={this.handleSubmit}>
           <div className="form-group">
             <label htmlFor="username">Username</label>
             <input
@@ -97,14 +95,16 @@ export class Login extends React.Component {
               {this.state.passError}
             </div>
           </div>
+          <input type="submit" className="btn" value="Log In" />
         </form>
-        <button type="button" className="btn" onClick={this.handleSubmit}>
-          Login
-        </button>
       </div>
     );
   }
 }
+
+Login.propTypes = {
+  logIn: PropTypes.func.isRequired,
+};
 
 const error = {
   textAlign: "center",

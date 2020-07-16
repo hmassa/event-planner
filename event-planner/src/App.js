@@ -2,20 +2,22 @@ import React from "react";
 import "./App.css";
 import { Login, Register } from "./components/login/index";
 import UserProfile from "./components/login/userProfile";
+import { Dashboard } from "./components/dashboard/index";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isLogginActive: true,
-      isLoggedIn: false,
+      isRegisterActive: false,
+      isDashboardActive: false,
       firstName: "",
       lastName: "",
       username: "",
     };
 
     this.toggleLoginRegister = this.toggleLoginRegister.bind(this);
-    this.toggleLoggedIn = this.toggleLoggedIn.bind(this);
+    this.logIn = this.logIn.bind(this);
   }
 
   componentDidMount() {
@@ -28,36 +30,35 @@ class App extends React.Component {
   toggleLoginRegister() {
     this.setState((prevState) => ({
       isLogginActive: !prevState.isLogginActive,
+      isRegisterActive: !prevState.isRegisterActive,
     }));
   }
 
-  toggleLoggedIn() {
-    this.setState((prevState) => ({
-      isLoggedIn: !prevState.isLoggedIn,
+  logIn() {
+    this.setState({
+      isDashboardActive: true,
       isLogginActive: false,
-    }));
+      isRegisterActive: false,
+    });
   }
 
   render() {
-    const { isLogginActive } = this.state;
+    const { isLogginActive, isRegisterActive, isDashboardActive } = this.state;
     const current = isLogginActive ? "Register" : "Login";
-    // const currentActive = isLogginActive ? "login" : "register";
     return (
       <div className="App">
+        {isDashboardActive && <Dashboard />}
         <div className="login">
           <div className="login-container">
-            {isLogginActive && (
-              <Login containerRef={(ref) => (this.current = ref)} />
-            )}
-            {!isLogginActive && (
-              <Register containerRef={(ref) => (this.current = ref)} />
-            )}
+            {isLogginActive && <Login logIn={this.logIn} />}
+            {isRegisterActive && <Register logIn={this.logIn} />}
           </div>
-          <Tab
-            current={current}
-            containerRef={(ref) => (this.rightSide = ref)}
-            onClick={this.toggleLoginRegister.bind(this)}
-          />
+          {!isDashboardActive && (
+            <Tab
+              current={current}
+              onClick={this.toggleLoginRegister.bind(this)}
+            />
+          )}
         </div>
       </div>
     );

@@ -1,5 +1,6 @@
 import React from "react";
 import $ from "jquery";
+import PropTypes from "prop-types";
 import UserProfile from "./userProfile";
 
 export class Register extends React.Component {
@@ -17,13 +18,9 @@ export class Register extends React.Component {
       passErrorStyle: noError,
       userErrorStyle: noError,
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.checkUsername = this.checkUsername.bind(this);
   }
 
-  handleChange(event) {
+  handleChange = (event) => {
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -31,9 +28,9 @@ export class Register extends React.Component {
     this.setState({
       [name]: value,
     });
-  }
+  };
 
-  checkUsername(event) {
+  checkUsername = (event) => {
     this.setState({ username: event.target.value });
     $.get(
       "http://localhost:8080/search.php?username=" + event.target.value,
@@ -48,19 +45,19 @@ export class Register extends React.Component {
         }
       }
     );
-  }
+  };
 
-  handleSubmit(event) {
+  handleSubmit = (event) => {
     event.preventDefault();
     const { password1, password2, usernameError } = this.state;
-    if (password1.localeCompare(password2) !== 0) {
+    if (usernameError.localeCompare("") !== 0) {
+      this.setState({ passErrorStyle: noError });
+      alert("Your username must be unique. Try again");
+    } else if (password1.localeCompare(password2) !== 0) {
       this.setState({
         passError: "The passwords you entered do not match.",
         passErrorStyle: error,
       });
-    } else if (usernameError.localeCompare("") !== 0) {
-      this.setState({ passErrorStyle: noError });
-      alert("Your username must be unique. Try again");
     } else {
       $.post(
         "http://localhost:8080/register.php",
@@ -82,18 +79,18 @@ export class Register extends React.Component {
               response["lname"],
               response["username"]
             );
+            this.props.logIn.bind(this);
           }
         }
       );
     }
-  }
+  };
 
   render() {
     return (
       <div className="base-container" ref={this.props.containerRef}>
         <div className="header">Register</div>
-        <div className="error" style={this.state.userErrorStyle}></div>
-        <form className="accForm">
+        <form className="accForm" onSubmit={this.handleSubmit}>
           <div className="form-group">
             <label htmlFor="fname">First Name</label>
             <input
@@ -166,14 +163,16 @@ export class Register extends React.Component {
               {this.state.passError}
             </div>
           </div>
+          <input type="submit" className="btn" value="Register" />
         </form>
-        <button type="button" className="btn" onClick={this.handleSubmit}>
-          Register
-        </button>
       </div>
     );
   }
 }
+
+Register.propTypes = {
+  logIn: PropTypes.func.isRequired,
+};
 
 const error = {
   textAlign: "center",
