@@ -1,24 +1,16 @@
 <?php
-    if(!session_start()) {
-        $username = "";
-    }
-    $username = empty($_SESSION['loggedin']) ? '' : $_SESSION['loggedin'];
 
-    if(!$username){
-        require "loginForm.php";
-        exit;
-    }
-
-    require_once 'db.conf';
+    require_once 'pdo.php';
 
     $title = empty($_POST['title']) ? '' : $_POST['title'];
     $description = empty($_POST['description']) ? '' : $_POST['description'];
     $date = empty($_POST['date']) ? '' : $_POST['date'];
     $time = empty($_POST['time']) ? '' : $_POST['time'];
+    $user = empty($_POST['username']) ? '' : $_POST['username'];
 
-    $sql = "INSERT INTO events (title, description, date, time, creator) VALUES ($title, $description, $date, $time, $username)";
+    $stmt = $pdo->prepare("INSERT INTO events (title, description, date, time, creator) VALUES (?, ?, ?, ?, ?)");
 
     
 
-    $mysqli->close();
+    $pdo = null;
 ?>

@@ -3,11 +3,6 @@
     header('Access-Control-Allow-Methods: GET, POST');
     header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 
-    if(!session_start()){
-        echo "session";
-        exit;
-    }
-
     require_once "pdo.php";
 
     $username = empty($_POST['username']) ? '' : $_POST['username'];

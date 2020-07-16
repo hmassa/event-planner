@@ -3,11 +3,6 @@
     header('Access-Control-Allow-Methods: GET, POST');
     header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 
-    if(!session_start()){
-        echo "session";
-        exit;
-    }
-
     require_once 'pdo.php';
 
     $username = empty($_POST['username']) ? '' : $_POST['username'];
@@ -19,8 +14,7 @@
     $results = $stmt->fetch(PDO::FETCH_ASSOC);
     if($stmt->rowCount() > 0){
         if (strcmp($password, $results['password']) == 0){
-            $_SESSION['loggedin'] = $username;
-            echo('success');
+            echo($results);
         } else {
             echo('pass');
         }  

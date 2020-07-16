@@ -1,5 +1,7 @@
 import React from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import $ from "jquery";
+import UserProfile from "./userProfile";
 
 export class Login extends React.Component {
   constructor(props) {
@@ -36,24 +38,26 @@ export class Login extends React.Component {
         password: this.state.password,
       },
       (response) => {
-        if (response.localeCompare("success") === 0) {
-          console.log(response);
-        } else if (response.localeCompare("user") === 0) {
+        if (response.localeCompare("user") === 0) {
           this.setState({
             usernameError: "Incorrect username",
             passError: "",
             userErrorStyle: error,
             passErrorStyle: noError,
           });
-        } else {
+        } else if (response.localeCompare("pass") === 0) {
           this.setState({
             passError: "Incorrect password",
             usernameError: "",
             userErrorStyle: noError,
             passErrorStyle: error,
           });
-          $("#passError").css(error);
-          $("#usernameError").css(noError);
+        } else {
+          UserProfile.setUserInfo(
+            response["fname"],
+            response["lname"],
+            response["username"]
+          );
         }
       }
     );

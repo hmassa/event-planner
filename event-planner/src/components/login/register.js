@@ -1,5 +1,6 @@
 import React from "react";
 import $ from "jquery";
+import UserProfile from "./userProfile";
 
 export class Register extends React.Component {
   constructor(props) {
@@ -71,10 +72,16 @@ export class Register extends React.Component {
           email: this.state.email,
         },
         function (response) {
-          if (response.localeCompare("success")) {
-            console.log(response);
+          if (response.localeCompare("fail")) {
+            alert(
+              "Uh oh, something went wrong. Please try again or contact the site administrator."
+            );
           } else {
-            console.log(response);
+            UserProfile.setUserInfo(
+              response["fname"],
+              response["lname"],
+              response["username"]
+            );
           }
         }
       );
@@ -85,6 +92,7 @@ export class Register extends React.Component {
     return (
       <div className="base-container" ref={this.props.containerRef}>
         <div className="header">Register</div>
+        <div className="error" style={this.state.userErrorStyle}></div>
         <form className="accForm">
           <div className="form-group">
             <label htmlFor="fname">First Name</label>
