@@ -1,0 +1,65 @@
+.dash {
+  text-align: left;
+}
+
+.navbar {
+  background-color: #00bfff;
+  color: white;
+  padding: 16px 30px;
+}
+
+#logout {
+  display: block;
+  float: right;
+  margin: 0;
+  padding: 0;
+}
+
+#logout h3 {
+  display: block;
+}
+
+#logout .icon {
+  width: 30px;
+  height: 30px;
+  display: block;
+}
+
+.navbar h1 {
+  color: white;
+  margin: 0;
+  display: inline-block;
+}
+
+.event-container {
+  text-align: left;
+  background-color: white;
+  padding: 25px;
+  margin: 10px;
+}
+
+.event-container h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.event-container p {
+  font-size: 18px;
+  color: rgb(77, 77, 77);
+}
+
+.event-container p b {
+  color: black;
+}
+
+.event-container .icon {
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  color: gray;
+}
+
+.event-container .icon:hover {
+  cursor: pointer;
+  box-shadow: 0 0 12px 2px rgba(15, 15, 15, 0.2);
+}

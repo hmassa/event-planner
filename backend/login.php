@@ -9,12 +9,18 @@
 	$password = empty($_POST['password']) ? '' : $_POST['password'];
     $password = hash('sha256', $password);
 
-    $stmt = $pdo->prepare("SELECT password FROM users WHERE username = ?");
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
     $stmt->execute([$username]);
     $results = $stmt->fetch(PDO::FETCH_ASSOC);
     if($stmt->rowCount() > 0){
         if (strcmp($password, $results['password']) == 0){
-            echo($results);
+            $returnArray = array(
+                "first_name" => $results['first_name'],
+                "last_name" => $results['last_name'],
+                "username" => $results["username"]
+            ); 
+
+            echo json_encode($returnArray);
         } else {
             echo('pass');
         }  

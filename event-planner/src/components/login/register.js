@@ -1,7 +1,6 @@
 import React from "react";
 import $ from "jquery";
 import PropTypes from "prop-types";
-import UserProfile from "./userProfile";
 
 export class Register extends React.Component {
   constructor(props) {
@@ -74,11 +73,10 @@ export class Register extends React.Component {
               "Uh oh, something went wrong. Please try again or contact the site administrator."
             );
           } else {
-            UserProfile.setUserInfo(
-              response["fname"],
-              response["lname"],
-              response["username"]
-            );
+            const res = JSON.parse(response);
+            localStorage.setItem("fname", res["fname"]);
+            localStorage.setItem("lname", res["lname"]);
+            localStorage.setItem("username", res["username"]);
             this.props.logIn.bind(this);
           }
         }

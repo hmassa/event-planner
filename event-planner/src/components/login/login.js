@@ -1,7 +1,6 @@
 import React from "react";
 import $ from "jquery";
 import PropTypes from "prop-types";
-import UserProfile from "./userProfile";
 
 export class Login extends React.Component {
   constructor(props) {
@@ -50,11 +49,10 @@ export class Login extends React.Component {
             passErrorStyle: error,
           });
         } else {
-          UserProfile.setUserInfo(
-            response["fname"],
-            response["lname"],
-            response["username"]
-          );
+          const res = JSON.parse(response);
+          localStorage.setItem("fname", res["first_name"]);
+          localStorage.setItem("lname", res["last_name"]);
+          localStorage.setItem("username", res["username"]);
           this.props.logIn();
         }
       }

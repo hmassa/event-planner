@@ -1,7 +1,6 @@
 import React from "react";
 import "./App.css";
 import { Login, Register } from "./components/login/index";
-import UserProfile from "./components/login/userProfile";
 import { Dashboard } from "./components/dashboard/index";
 
 class App extends React.Component {
@@ -15,39 +14,54 @@ class App extends React.Component {
       lastName: "",
       username: "",
     };
-
-    this.toggleLoginRegister = this.toggleLoginRegister.bind(this);
-    this.logIn = this.logIn.bind(this);
   }
 
   componentDidMount() {
-    const user = UserProfile.getUsername;
-    const fname = UserProfile.getFirstName;
-    const lname = UserProfile.getLastName;
+    const user = localStorage.getItem("username");
+    const fname = localStorage.getItem("fname");
+    const lname = localStorage.getItem("lname");
     this.setState({ firstName: fname, lastName: lname, username: user });
+    if (typeof user !== "undefined") {
+      this.logIn();
+    }
   }
 
-  toggleLoginRegister() {
+  toggleLoginRegister = () => {
     this.setState((prevState) => ({
       isLogginActive: !prevState.isLogginActive,
       isRegisterActive: !prevState.isRegisterActive,
     }));
-  }
+  };
 
-  logIn() {
+  logIn = () => {
     this.setState({
       isDashboardActive: true,
       isLogginActive: false,
       isRegisterActive: false,
     });
-  }
+  };
+
+  logOut = () => {
+    localStorage.clear();
+    this.setState({
+      isDashboardActive: false,
+      isLogginActive: true,
+      isRegisterActive: false,
+    });
+  };
 
   render() {
     const { isLogginActive, isRegisterActive, isDashboardActive } = this.state;
     const current = isLogginActive ? "Register" : "Login";
     return (
       <div className="App">
-        {isDashboardActive && <Dashboard />}
+        {isDashboardActive && (
+          <Dashboard
+            fname={this.state.firstName}
+            username={this.state.username}
+            logout={this.logout}
+          />
+        )}
         <div className="login">
           <div className="login-container">
             {isLogginActive && <Login logIn={this.logIn} />}
