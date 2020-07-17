@@ -99,7 +99,7 @@ export class Event extends React.Component {
             <form className="editForm" onSubmit={this.edit}>
               <div className="col1">
                 <div className="form-group">
-                  <label htmlFor="title">Tiitle: </label>
+                  <label htmlFor="title">Title: </label>
                   <input
                     type="text"
                     name="title"
