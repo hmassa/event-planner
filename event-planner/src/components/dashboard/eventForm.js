@@ -40,6 +40,8 @@ export class EventForm extends React.Component {
         this.props.toggleAdd.bind(this);
       }
     );
+
+    this.props.toggleAdd();
   };
 
   render() {

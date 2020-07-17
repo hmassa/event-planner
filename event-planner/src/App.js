@@ -58,8 +58,8 @@ class App extends React.Component {
       <div className="App">
         {isDashboardActive && (
           <Dashboard
-            fname={this.state.firstName}
-            username={this.state.username}
+            fname={localStorage.getItem("fname")}
+            username={localStorage.getItem("username")}
             logout={this.logOut}
           />
         )}

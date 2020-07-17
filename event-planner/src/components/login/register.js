@@ -67,17 +67,17 @@ export class Register extends React.Component {
           password: this.state.password1,
           email: this.state.email,
         },
-        function (response) {
-          if (response.localeCompare("fail")) {
+        (response) => {
+          console.log(response);
+          if (response.localeCompare("failure") === 0) {
             alert(
               "Uh oh, something went wrong. Please try again or contact the site administrator."
             );
           } else {
-            const res = JSON.parse(response);
-            localStorage.setItem("fname", res["fname"]);
-            localStorage.setItem("lname", res["lname"]);
-            localStorage.setItem("username", res["username"]);
-            this.props.logIn.bind(this);
+            localStorage.setItem("fname", this.state.fname);
+            localStorage.setItem("lname", this.state.lname);
+            localStorage.setItem("username", this.state.username);
+            this.props.logIn();
           }
         }
       );

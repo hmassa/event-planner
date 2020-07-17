@@ -15,11 +15,9 @@
     $stmt = $pdo->prepare("INSERT INTO users VALUES (?, ?, ?, ?, ?)");
     $value = $stmt->execute([$fname, $lname, $username, $password, $email]);
     if ($value){
-        $_SESSION['loggedin'] = $username;
         echo("success");
     } else {
-        echo("failure");
-        // print_r($stmt->errorInfo(), true);
+        echo json_encode("failure");
     }
     $stmt = null;
     $pdo = null;

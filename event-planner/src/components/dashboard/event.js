@@ -9,6 +9,10 @@ export class Event extends React.Component {
     this.state = {
       event: this.props.event,
       isEditing: false,
+      title: this.props.event.title,
+      date: this.props.event.date,
+      time: this.props.event.time,
+      description: this.props.event.description,
     };
   }
 
@@ -22,8 +26,8 @@ export class Event extends React.Component {
     this.props.delete(this.state.event.event_id);
   };
 
-  handleChange = (event) => {
-    const target = event.target;
+  handleChange = (e) => {
+    const target = e.target;
     const value = target.value;
     const name = target.name;
 
@@ -32,8 +36,19 @@ export class Event extends React.Component {
     });
   };
 
-  handleSubmit = () => {
-    this.props.edit(this.state.event);
+  edit = (e) => {
+    e.preventDefault();
+    let newEvent = this.state.event;
+    newEvent.title = this.state.title;
+    newEvent.date = this.state.date;
+    newEvent.time = this.state.time;
+    newEvent.description = this.state.description;
+    this.setState({
+      event: newEvent,
+    });
+
+    this.props.edit(newEvent);
+    this.toggleEdit();
   };
 
   render() {
@@ -63,7 +78,7 @@ export class Event extends React.Component {
               </p>
               <p>{description}</p>
             </div>
-            <div className="icon_container">
+            <div className="icon-container">
               <img
                 src={EditIcon}
                 className="icon"
@@ -115,25 +130,25 @@ export class Event extends React.Component {
                 </div>
               </div>
               <div className="col2">
-                <div className="form-group">
+                <div className="form-col2">
                   <label htmlFor="description">Description: </label>
                   <textarea
-                    name="title"
+                    name="description"
                     form="edit"
                     required
                     value={this.state.description}
                     onChange={this.handleChange}
                   />
+                  <div className="button-container">
+                    <input type="submit" className="btn" value="Save" />
+                    <input
+                      type="button"
+                      className="cancelBtn"
+                      value="Cancel"
+                      onClick={this.toggleEdit}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="icon_container">
-                <input type="submit" className="btn" value="Add Event" />
-                <input
-                  type="button"
-                  className="cancelBtn"
-                  value="Cancel"
-                  onClick={this.toggleEdit}
-                />
               </div>
             </form>
           </div>

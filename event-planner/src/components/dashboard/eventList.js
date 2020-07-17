@@ -40,20 +40,21 @@ export class EventList extends React.Component {
     );
   };
 
-  edit = (title, description, date, time, id) => {
+  edit = (event) => {
     $.post(
       "http://localhost:8080/event.php",
       {
         function: "edit",
-        id: id,
-        title: title,
-        description: description,
-        date: date,
-        time: time,
+        id: event.event_id,
+        title: event.title,
+        description: event.description,
+        date: event.date,
+        time: event.time,
       },
       (response) => {
-        console.log(response);
-        //window.location.reload();
+        if (response.localeCompare("success") !== 0) {
+          alert("Uh oh. Something went wrong. Please try again.");
+        }
       }
     );
   };
