@@ -15,7 +15,7 @@ export class EventList extends React.Component {
     $.get(
       "http://localhost:8080/getEvents.php?username=" + this.props.username,
       (response) => {
-        if (response.localeCompare("false") === 0) {
+        if (response === false) {
         } else {
           const res = JSON.parse(response);
           for (var i = 0; i < res.length; i++) {
@@ -28,22 +28,41 @@ export class EventList extends React.Component {
 
   delete = (id) => {
     $.post(
-      "http://localhost:8080/delete.php",
+      "http://localhost:8080/event.php",
       {
+        function: "delete",
         id: id,
       },
       (response) => {
+        console.log(response);
         window.location.reload();
       }
     );
   };
 
-  edit = (event) => {};
+  edit = (title, description, date, time, id) => {
+    $.post(
+      "http://localhost:8080/event.php",
+      {
+        function: "edit",
+        id: id,
+        title: title,
+        description: description,
+        date: date,
+        time: time,
+      },
+      (response) => {
+        console.log(response);
+        //window.location.reload();
+      }
+    );
+  };
 
   render() {
+    var i = 0;
     return this.state.events.map((event) => (
       <div className="event-list">
-        <Event event={event} edit={this.edit} delete={this.delete} />
+        <Event key={i} event={event} edit={this.edit} delete={this.delete} />
       </div>
     ));
   }

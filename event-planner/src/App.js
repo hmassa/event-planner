@@ -21,7 +21,7 @@ class App extends React.Component {
     const fname = localStorage.getItem("fname");
     const lname = localStorage.getItem("lname");
     this.setState({ firstName: fname, lastName: lname, username: user });
-    if (typeof user !== "undefined") {
+    if (typeof user !== "undefined" && user !== null) {
       this.logIn();
     }
   }
@@ -43,6 +43,7 @@ class App extends React.Component {
 
   logOut = () => {
     localStorage.clear();
+    window.location.reload();
     this.setState({
       isDashboardActive: false,
       isLogginActive: true,
@@ -59,7 +60,7 @@ class App extends React.Component {
           <Dashboard
             fname={this.state.firstName}
             username={this.state.username}
-            logout={this.logout}
+            logout={this.logOut}
           />
         )}
         <div className="login">
