@@ -159,6 +159,8 @@
   border: none;
   width: 100%;
   height: 10em;
+  font-size: 16px;
+  font-family: "Raleway", sans-serif;
 }
 
 .form-col2 textarea:focus {
