@@ -5,18 +5,18 @@
 
     require_once 'pdo.php';
 
-    $username = empty($_GET['username']) ? "" : $_GET['username'];
-    if($username === ""){
+    $username = $_GET['username']; // No need to keep calling $_GET['username']
+    if(empty($username)) {
         echo('fail');
     } else {
-        $rows = array();
-        $stmt = $pdo->prepare("SELECT * FROM events WHERE creator = ?");
-        $stmt->execute([$username]);
-        while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
-            array_push($rows, $result);
-        }
-        
-        echo json_encode($rows);
+      $rows = array();
+      $stmt = $pdo->prepare("SELECT * FROM events WHERE creator = ?");
+      $stmt->execute([$username]);
+      while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
+          array_push($rows, $result);
+      }
+      
+      echo json_encode($rows);
     }
     
     
