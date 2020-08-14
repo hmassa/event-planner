@@ -2,28 +2,31 @@ import React from "react";
 import $ from "jquery";
 import PropTypes from "prop-types";
 
-export class Login extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: "",
-      password: "",
-      usernameError: "",
-      passError: "",
-      userErrorStyle: noError,
-      passErrorStyle: noError,
-    };
-  }
+const error = {
+  textAlign: "center",
+  width: "100%",
+  padding: "8px 0",
+  color: "#ff2a23",
+  backgroundColor: "#ffcccc",
+  fontSize: "14px",
+  border: "2px solid #ff2a23",
+};
 
-  handleChange = (event) => {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
+const noError = {
+  display: "none",
+};
 
-    this.setState({
-      [name]: value,
-    });
+class Login extends React.Component {
+  state = {
+    username: "",
+    password: "",
+    usernameError: "",
+    passError: "",
+    userErrorStyle: noError,
+    passErrorStyle: noError,
   };
+
+  handleChange = event => this.setState({ [event.target.name]: event.target.value });
 
   handleSubmit = (event) => {
     event.preventDefault();
@@ -104,16 +107,4 @@ Login.propTypes = {
   logIn: PropTypes.func.isRequired,
 };
 
-const error = {
-  textAlign: "center",
-  width: "100%",
-  padding: "8px 0",
-  color: "#ff2a23",
-  backgroundColor: "#ffcccc",
-  fontSize: "14px",
-  border: "2px solid #ff2a23",
-};
-
-const noError = {
-  display: "none",
-};
+export default Login;

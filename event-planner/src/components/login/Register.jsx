@@ -2,34 +2,37 @@ import React from "react";
 import $ from "jquery";
 import PropTypes from "prop-types";
 
-export class Register extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      fname: "",
-      lname: "",
-      email: "",
-      username: "",
-      password1: "",
-      password2: "",
-      passError: "",
-      usernameError: "",
-      passErrorStyle: noError,
-      userErrorStyle: noError,
-    };
-  }
+const error = {
+  textAlign: "center",
+  width: "100%",
+  padding: "8px 0",
+  color: "#ff2a23",
+  backgroundColor: "#ffcccc",
+  fontSize: "14px",
+  border: "2px solid #ff2a23",
+};
 
-  handleChange = (event) => {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
+const noError = {
+  display: "none",
+};
 
-    this.setState({
-      [name]: value,
-    });
+class Register extends React.Component {
+  state = {
+    fname: "",
+    lname: "",
+    email: "",
+    username: "",
+    password1: "",
+    password2: "",
+    passError: "",
+    usernameError: "",
+    passErrorStyle: noError,
+    userErrorStyle: noError,
   };
 
-  checkUsername = (event) => {
+  handleChange = event => this.setState({ [event.target.name]: event.target.value });
+
+  checkUsername = event => {
     this.setState({ username: event.target.value });
     $.get(
       "http://localhost:8080/search.php?username=" + event.target.value,
@@ -172,16 +175,4 @@ Register.propTypes = {
   logIn: PropTypes.func.isRequired,
 };
 
-const error = {
-  textAlign: "center",
-  width: "100%",
-  padding: "8px 0",
-  color: "#ff2a23",
-  backgroundColor: "#ffcccc",
-  fontSize: "14px",
-  border: "2px solid #ff2a23",
-};
-
-const noError = {
-  display: "none",
-};
+export default Register;
